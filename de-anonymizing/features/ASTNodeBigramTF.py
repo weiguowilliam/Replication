@@ -1,9 +1,3 @@
-"""
-Todo: correct: (parent node, parent node),(child node, child node) will appear in bigram, which is wrong.
-
-"""
-
-
 import sys
 import clang.cindex
 from clang.cindex import Config
@@ -76,7 +70,7 @@ def get_ast(cursor, BigramDic = {}, level = 0):
 if __name__ == '__main__':
     index = clang.cindex.Index.create()
     tu = index.parse('test1.cpp')
-    tu = index.parse('test2.cpp')
+    # tu = index.parse('test2.cpp')
     print 'Translation unit:', tu.spelling
     print tu.cursor.kind
     bd = {}
