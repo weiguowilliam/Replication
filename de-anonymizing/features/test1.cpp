@@ -26,6 +26,7 @@ int main() {
 	freopen("D-small-attempt0.in", "r", stdin);
 	freopen("D-small.out", "w", stdout);
 	
+	int aaa = 3;
 	int tt = nextInt();
 	For(t,1,tt+1) {
 		int n = nextInt();

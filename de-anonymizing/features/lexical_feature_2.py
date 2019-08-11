@@ -45,7 +45,7 @@ def get_lexical_feature_2(cursor):
                 key_dic[k] = math.log(float(dic[k])/file_length)
             else:
                 # key_dic[k] = 0
-                key_dic[k] = -10000 #since ln(0) is invalid, it is negative infinity.
+                key_dic[k] = 0 #since ln(0) is invalid, it is set to be 0.
         return key_dic
 
     def get_file_length(cur):
