@@ -57,20 +57,21 @@ def get_ast(cursor, BigramDic = {}, level = 0):
             
         get_ast(c, BigramDic, level + 1)
                 
-# def spell(cursor):
-# #     # if cursor.spelling.strip():
-# #     #     return cursor.spelling
-# #     # else:
-# #     #     return cursor.kind
-# #     # return cursor.kind
-# #     # return cursor.spelling
-#     return str(" kind "+str(cursor.kind)+" spelling "+str(cursor.spelling))
+def spell(cursor):
+    # if cursor.spelling.strip():
+    #     return cursor.spelling
+    # else:
+    #     return cursor.kind
+    # return cursor.kind
+    # return cursor.spelling
+    return str(" kind "+str(cursor.kind)+" spelling "+str(cursor.spelling))
 
 
 if __name__ == '__main__':
     index = clang.cindex.Index.create()
-    tu = index.parse('test1.cpp')
+    # tu = index.parse('test1.cpp')
     # tu = index.parse('test2.cpp')
+    tu = index.parse('test3.cpp')
     print 'Translation unit:', tu.spelling
     print tu.cursor.kind
     bd = {}
@@ -119,21 +120,21 @@ if __name__ == '__main__':
 
 
 ################ This is a homemade ast tree for test ####################
-    # for c in tu.cursor.get_children():
-    #     print spell(c)
-    #     for a in c.get_children():
-    #         print "  ",spell(a)
-    #         for b in a.get_children():
-    #             print "    ",spell(b)
-    #             for d in b.get_children():
-    #                 print "      ",spell(d)
-    #                 for e in d.get_children():
-    #                     print " "*8,spell(e)
-    #                     for f in e.get_children():
-    #                         print " "*10,spell(f)
-    #                         for g in f.get_children():
-    #                             print " "*12,spell(g)
-    #                             for h in g.get_children():
-    #                                print " "*14,spell(h)
+    for c in tu.cursor.get_children():
+        print spell(c)
+        for a in c.get_children():
+            print "  ",spell(a)
+            for b in a.get_children():
+                print "    ",spell(b)
+                for d in b.get_children():
+                    print "      ",spell(d)
+                    for e in d.get_children():
+                        print " "*8,spell(e)
+                        for f in e.get_children():
+                            print " "*10,spell(f)
+                            for g in f.get_children():
+                                print " "*12,spell(g)
+                                for h in g.get_children():
+                                   print " "*14,spell(h)
 #############################################################################
 

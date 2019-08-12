@@ -1,3 +1,5 @@
+
+
 int foo()
 {
     if((x<0) || x>MAX)

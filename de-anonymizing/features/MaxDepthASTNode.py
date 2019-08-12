@@ -19,7 +19,7 @@ def get_ast(cursor, level = 0, depthlist = []):
 
 if __name__ == '__main__':
     index = clang.cindex.Index.create()
-    tu = index.parse('test1.cpp')
+    tu = index.parse('test2.cpp')
     print 'Translation unit:', tu.spelling
     dll = [0]
     get_ast(cursor = tu.cursor, level = 0, depthlist= dll)
