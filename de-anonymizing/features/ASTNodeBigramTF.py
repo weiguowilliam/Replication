@@ -28,10 +28,15 @@ def get_ast(cursor, BigramDic = {}, level = 0):
             if (parent_spelling == child_spelling)&(parent_isKind == 0):# in case of (UNEXPOSED_EXPR,DECL_REF_EXPR)->(a,a)
                 pass
             else:
-                if (parent_spelling, child_spelling) not in BigramDic:
-                    BigramDic[(parent_spelling, child_spelling)] = 1
+                name = str(parent_spelling)+str(child_spelling)
+                if name not in BigramDic:
+                # if (parent_spelling, child_spelling) not in BigramDic:
+                    # name = str(parent_spelling)+str(child_spelling)
+                    # BigramDic[(parent_spelling, child_spelling)] = 1
+                    BigramDic[name] = 1
                 else:
-                    BigramDic[(parent_spelling, child_spelling)] += 1
+                    # BigramDic[(parent_spelling, child_spelling)] += 1
+                    BigramDic[name] += 1
             
         get_ast(c, BigramDic, level + 1)
                 

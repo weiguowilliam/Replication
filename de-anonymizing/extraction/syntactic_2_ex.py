@@ -4,6 +4,7 @@ import clang.cindex
 from clang.cindex import Config
 from clang.cindex import Cursor
 from clang.cindex import CursorKind
+import pandas as pd
 
 sys.path.append(os.path.abspath("/Users/weiguo/Desktop/Replication/de-anonymizing/features"))
 from ASTNodeBigramTF import *
@@ -23,7 +24,7 @@ def syntactic_2_extractor(num_user = 50):
             tu = index.parse(f_path)
             # print tu.spelling
             # print len(num_user_dict[user])
-            get_ast(tu.cursor,num_user_dict[user])
+            get_bigram(tu.cursor,num_user_dict[user])
             # print len(num_user_dict[user])
         # print "*********"
     # return num_user_dict 
@@ -45,9 +46,13 @@ def syntactic_2_extractor(num_user = 50):
 
 
 if __name__ == '__main__':
-    b = syntactic_2_extractor(num_user= 2)
-    for user in b:
-        print len(a[user])
+    b = syntactic_2_extractor(num_user= 10)
+    b_frame = pd.DataFrame.from_dict(b)
+    b_frame.to_csv('/Users/weiguo/Desktop/Replication/de-anonymizing/data/bigram.csv')
+    
+    
+    
+    
     #test right: 154 in first user, 147 in second user, 199 differeent pairs, so 51 pair in common, then total number = 154+147-51 = 250
     # test different number of pairs
     # i = 0
