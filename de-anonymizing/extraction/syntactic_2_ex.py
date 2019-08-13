@@ -21,7 +21,11 @@ def syntactic_2_extractor(num_user = 50):
             f_path = os.path.join(user_path,f)
             index = clang.cindex.Index.create()
             tu = index.parse(f_path)
+            # print tu.spelling
+            # print len(num_user_dict[user])
             get_ast(tu.cursor,num_user_dict[user])
+            # print len(num_user_dict[user])
+        # print "*********"
     # return num_user_dict 
 
     num_user_all_dict = {i:{} for i in num_user_list}
@@ -33,14 +37,25 @@ def syntactic_2_extractor(num_user = 50):
                     if item not in num_user_all_dict[user]:
                         num_user_all_dict[user][item] = 0
     
-    return num_user_all_dict, num_user_dict
+    return num_user_all_dict
+    # return num_user_all_dict, num_user_dict
+    # return num_user_dict
                     
 
 
 
 if __name__ == '__main__':
-    a,b = syntactic_2_extractor(num_user= 4)
-    for i in a:
-        print len(a[i])
-    for i in b:
-        print len(b[i])
+    b = syntactic_2_extractor(num_user= 2)
+    for user in b:
+        print len(a[user])
+    #test right: 154 in first user, 147 in second user, 199 differeent pairs, so 51 pair in common, then total number = 154+147-51 = 250
+    # test different number of pairs
+    # i = 0
+    # for user in a:
+    #     for item in a[user]:
+    #         for uuser in a:
+    #             if uuser != user:
+    #                 if item not in a[uuser]:
+    #                     i += 1
+    # print i
+    
