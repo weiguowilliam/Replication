@@ -1,5 +1,7 @@
 import pandas as pd
-
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.datasets import make_classification
+import random
 
 """
 based on weka information gain criteria, positive feature column number in (..forweka.csv) are:
@@ -9,7 +11,7 @@ based on weka information gain criteria, positive feature column number in (..fo
 #just use the hand-crafted "forweka.csv" for classification
 
 bdf = pd.read_csv("/Users/weiguo/Desktop/Replication/de-anonymizing/data/bigram0814_forweka.csv") 
-print bdf.iloc[:3]
+# print bdf.iloc[:3]
 
 bdf_head = list(bdf.columns) 
 # print bdf_head
@@ -21,14 +23,51 @@ user_head = []
 for i in use_column:
     user_head.append(bdf_head[i])
 
-# print user_head[0:3]
-# print len(user_head)#checked.right.
-# print len(use_column_incsv)
 
+
+
+
+# X = bdf[user_head]
+# Y = pd.factorize(bdf[bdf_head[-1]])[0]
+
+
+# clf = RandomForestClassifier(n_estimators=300,random_state=0)
+# clf.fit(X,Y)
+
+#test
+# number_sample = bdf.shape[0]
+# test_row = random.sample(range(1,number_sample),5)
+
+# X_test = X.iloc[test_row,:]
+# Y_test = bdf[bdf_head[-1]].iloc[test_row,:]
+# print Y_test
+# print type(Y_test)
+
+#train
 user_head.append(bdf_head[-1])
 df = bdf[user_head]
+X = bdf[user_head[0:-1]]
+Y = pd.factorize(bdf[user_head[-1]])[0]
 
+clf = RandomForestClassifier(n_estimators=300,random_state=0)
+clf.fit(X,Y)
 
-"""
-each row should be for a file instead of a programmer. So for n programmer, there should be 9n rows.
-"""
+#test
+number_sample = bdf.shape[0]
+test_row = random.sample(range(1,number_sample),5)
+
+df_test = df.iloc[test_row,:]
+X_test = df[user_head[0:-1]]
+Y_test = pd.factorize(df[user_head[-1]])[0]
+
+Y_predict = clf.predict(X_test)
+print Y_predict
+print Y_test
+
+wrong = 0
+for i in range(len(Y_predict)):
+    if Y_predict[i] == Y_test[i]:
+        wrong += 1
+
+accuracy = float(wrong)/len(Y_predict)
+print accuracy
