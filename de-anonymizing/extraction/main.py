@@ -44,9 +44,30 @@ def syntactic_2_extractor_nb(num_user = 2, num_file_per_author = 9):
                 for item in num_file_dict[other_file]:
                     if item not in num_file_dict[file]:
                         num_file_all_dict[file][item] = 0
-    
-    return num_file_all_dict
 
+    for file in num_file_all_dict:
+        file_sample = file
+        item_len = num_file_all_dict[file_sample]
+        break
+
+    trans_dict = {}
+    i = 0
+    for old_feature in num_file_all_dict[file_sample]:
+        if old_feature != 'class':
+            new_feature_name = "bigram" + str(i)
+            trans_dict[old_feature] = new_feature_name
+            i += 1
+    trans_dict['class'] = 'class'
+    out_dict = {i:{} for i in num_file_all_dict}
+
+    for file in out_dict:
+        for old_feature in num_file_all_dict[file]:
+            new_feature = trans_dict[old_feature]
+            out_dict[file][new_feature] = num_file_all_dict[file][old_feature]
+    
+    return out_dict
+
+#this one is wrong.
 def syntactic_2_extractor(num_user = 50):
     path = "/Users/weiguo/Desktop/traindata"
     all_user_list = next(os.walk(path))[1]
@@ -94,13 +115,8 @@ def syntactic_2_extractor(num_user = 50):
             new_f = trans_dict[old_feature]
             out_dict[user][new_f] = num_user_all_dict[user][old_feature]
 
-
-
     return out_dict
-    # return num_user_all_dict
-    # return num_user_all_dict_rename
-    # return num_user_all_dict, num_user_dict
-    # return num_user_dict
+
             
 
 
@@ -110,21 +126,4 @@ if __name__ == '__main__':
     b_frame = pd.DataFrame.from_dict(b,orient='index')
     b_frame.to_csv('/Users/weiguo/Desktop/Replication/de-anonymizing/data/bigram0814.csv')
     
-
-
-    
-
-    
-    
-    
-    #test right: 154 in first user, 147 in second user, 199 differeent pairs, so 51 pair in common, then total number = 154+147-51 = 250
-    # test different number of pairs
-    # i = 0
-    # for user in a:
-    #     for item in a[user]:
-    #         for uuser in a:
-    #             if uuser != user:
-    #                 if item not in a[uuser]:
-    #                     i += 1
-    # print i
     
