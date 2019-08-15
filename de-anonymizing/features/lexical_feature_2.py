@@ -13,6 +13,7 @@ def get_lexical_feature_2(cursor):
     
     def get_ast(cur):
         '''
+        ln(num_keyword/length)
         use variable pre_str to get pre_str-this_str to catch "else if" structure
         '''
         NumKeyDic = {}

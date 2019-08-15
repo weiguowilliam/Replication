@@ -11,12 +11,6 @@ def get_bigram(cursor, BigramDic = {}, level = 0):
     Bigram can only be made by a parent node ant its children node. Use BigramDic to store the bigram pair.
     When the node is not a part of real code, use its cursor kind to construct the bigram.
     """
-
-    # def spell(cursor):
-    #     if cursor.spelling.strip():
-    #         return cursor.spelling,0
-    #     else:
-    #         return str(cursor.kind).split('.')[-1],1
     def spell(cursor):
         if cursor.spelling.strip():
             return cursor.spelling,0

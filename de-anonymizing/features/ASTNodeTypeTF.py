@@ -8,26 +8,31 @@ from clang.cindex import CursorKind
 Config.set_library_file("/usr/local/Cellar/llvm/8.0.0_1/lib/libclang.dylib")
 
 
+def get_ASTNodeTypeTF(file_cursor):
 
-def get_ast(cursor, NodeTypeDic = {}):
-    """
-    store the occurance of each node in dictionary NodeTypeDic
-    """
-    for c in cursor.get_children():
-        if c.kind not in NodeTypeDic:
-            NodeTypeDic[c.kind] = 1
-        else:
-            NodeTypeDic[c.kind] += 1
-        # print c.kind
-        # print c.type.kind
-        get_ast(c, NodeTypeDic)
+    def get_ASTNodeTypeTF_inside(cursor, NodeTypeDic = {}):
+        """
+        store the occurance of each node in dictionary NodeTypeDic
+        """
+        for c in cursor.get_children():
+            feature_name = "NodeTypeTF" + str(c.kind)
+            if feature_name not in NodeTypeDic:
+                NodeTypeDic[feature_name] = 1
+            else:
+                NodeTypeDic[feature_name] += 1
+            get_ASTNodeTypeTF_inside(c, NodeTypeDic)
+
+    dic_tem = {}
+    get_ASTNodeTypeTF_inside(cursor = file_cursor, NodeTypeDic=dic_tem)
+    return dic_tem
+    
 
 if __name__ == '__main__':
     index = clang.cindex.Index.create()
     tu = index.parse('test1.cpp')
     print 'Translation unit:', tu.spelling
-    ntd = {}
-    get_ast(tu.cursor, NodeTypeDic= ntd)
+    
+    ntd = get_ASTNodeTypeTF(tu.cursor)
     print ntd
     print len(ntd)
 
