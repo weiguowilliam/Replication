@@ -21,10 +21,20 @@ def get_ASTNodeTypeTF(file_cursor):
             else:
                 NodeTypeDic[feature_name] += 1
             get_ASTNodeTypeTF_inside(c, NodeTypeDic)
+    
+    def get_bi_tf(rd = {}):
+        tf_d = {i:0 for i in rd}
+        sum_node = 0
+        for i in rd:
+            sum_node += rd[i]
+        for i in tf_d:
+            tf_d[i] = float(rd[i])/sum_node
+        return tf_d
 
     dic_tem = {}
     get_ASTNodeTypeTF_inside(cursor = file_cursor, NodeTypeDic=dic_tem)
-    return dic_tem
+    dic_out = get_bi_tf(rd = dic_tem)
+    return dic_out
     
 
 if __name__ == '__main__':

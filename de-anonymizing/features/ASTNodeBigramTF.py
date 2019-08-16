@@ -6,41 +6,62 @@ from clang.cindex import CursorKind
 
 Config.set_library_file("/usr/local/Cellar/llvm/8.0.0_1/lib/libclang.dylib")
 
-def get_bigram(cursor, BigramDic = {}, level = 0):
-    """
-    Bigram can only be made by a parent node ant its children node. Use BigramDic to store the bigram pair.
-    When the node is not a part of real code, use its cursor kind to construct the bigram.
-    """
+def get_bigram(file_cursor):
     def spell(cursor):
         if cursor.spelling.strip():
             return cursor.spelling,0
         else:
             return cursor.kind,1
 
-    for c in cursor.get_children():
-        if level != 0:
-            # parent_spelling = spell(cursor)[0]
-            # child_spelling = spell(c)[0]
-            parent_spelling = spell(cursor)[0]
-            child_spelling = spell(c)[0]
-            parent_isKind = spell(cursor)[1]
+    def get_bi_inside(cursor, BigramDic = {}, level = 0):
+        """
+        Bigram can only be made by a parent node ant its children node. Use BigramDic to store the bigram pair.
+        When the node is not a part of real code, use its cursor kind to construct the bigram.
+        """
+        # def spell(cursor):
+        #     if cursor.spelling.strip():
+        #         return cursor.spelling,0
+        #     else:
+        #         return cursor.kind,1
 
-            if (parent_spelling == child_spelling)&(parent_isKind == 0):# in case of (UNEXPOSED_EXPR,DECL_REF_EXPR)->(a,a)
-                pass
-            else:
+        for c in cursor.get_children():
+            if level != 0:
+                # parent_spelling = spell(cursor)[0]
+                # child_spelling = spell(c)[0]
+                parent_spelling = spell(cursor)[0]
+                child_spelling = spell(c)[0]
+                parent_isKind = spell(cursor)[1]
 
-                name = str(parent_spelling)+str(child_spelling)
-                if name not in BigramDic:
-                # if (parent_spelling, child_spelling) not in BigramDic:
-                    # name = str(parent_spelling)+str(child_spelling)
-                    # BigramDic[(parent_spelling, child_spelling)] = 1
-                    BigramDic[name] = 1
+                if (parent_spelling == child_spelling)&(parent_isKind == 0):# in case of (UNEXPOSED_EXPR,DECL_REF_EXPR)->(a,a)
+                    pass
                 else:
-                    # BigramDic[(parent_spelling, child_spelling)] += 1
-                    BigramDic[name] += 1    
-            
-        get_bigram(c, BigramDic, level + 1)
+
+                    name = str(parent_spelling)+str(child_spelling)
+                    if name not in BigramDic:
+                    # if (parent_spelling, child_spelling) not in BigramDic:
+                        # name = str(parent_spelling)+str(child_spelling)
+                        # BigramDic[(parent_spelling, child_spelling)] = 1
+                        BigramDic[name] = 1
+                    else:
+                        # BigramDic[(parent_spelling, child_spelling)] += 1
+                        BigramDic[name] += 1    
                 
+            get_bi_inside(c, BigramDic, level + 1)
+
+    def get_bi_tf(rd = {}):
+        tf_d = {i:0 for i in rd}
+        sum_node = 0
+        for i in rd:
+            sum_node += rd[i]
+        for i in tf_d:
+            tf_d[i] = float(rd[i])/sum_node
+        return tf_d
+
+
+    bd_tem = {}
+    get_bi_inside(cursor = file_cursor, BigramDic={}, level = 0)
+    bd_out = get_bi_tf(rd = bd_tem)
+    return bd_out    
 
 
 # index = clang.cindex.Index.create()

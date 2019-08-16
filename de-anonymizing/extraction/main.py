@@ -29,7 +29,10 @@ def syntactic_2_extractor_nb(num_user = 2, num_file_per_author = 9):
                 tu = index.parse(f_path)
 
                 #get bigram feature
-                get_bigram(tu.cursor, num_file_dict[file])
+                # get_bigram(tu.cursor, num_file_dict[file])
+                bgd = get_bigram(tu.cursor)
+                num_file_dict[file].update(bgd)
+                
                 
                 #get max depth feature
                 num_file_dict[file]['maxdepthnode'] = get_MaxDepthNode(tu.cursor)

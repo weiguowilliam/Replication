@@ -33,8 +33,15 @@ def get_cppKeywords(file_cursor):
         str_token = "cppKeywords" + token
         if str_token not in output_dic:
             output_dic[str_token] = 0
+
+    tf_d = {i:0 for i in output_dic}
+    sum_node = 0
+    for i in output_dic:
+        sum_node += output_dic[i]
+    for i in tf_d:
+        tf_d[i] = float(output_dic[i])/sum_node
+    return tf_d
     
-    return output_dic
 
 if __name__ == '__main__':
     index = clang.cindex.Index.create()
