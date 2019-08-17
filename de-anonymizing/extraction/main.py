@@ -12,11 +12,18 @@ from features.ASTNodeBigramTF import get_bigram
 from features.MaxDepthASTNode import get_MaxDepthNode
 from features.ASTNodeTypeTF import get_ASTNodeTypeTF
 from features.ASTNodeTypeAvgDep import get_ASTNodeTypeAvgDepth
-from cppKeywords import get_cppKeywords
+from features.cppKeywords import get_cppKeywords
+from features.utils import *
+from features.LeavesTF import get_LeavesTF
+from features.LeavesAvgDep import get_LeavesAD
 
 def syntactic_2_extractor_nb(num_user = 2, num_file_per_author = 9):
 
     path = "/Users/weiguo/Desktop/traindata"
+    
+    feature_idf_dict = get_DocumentFrequency(dic_path = path, user_num = num_user)
+    leaves_idf_dict = get_lf(dic_path = path, user_num = num_user)
+        
     i = 0
     num_file_dict = {}
     for r, d, f in os.walk(path):
@@ -28,12 +35,11 @@ def syntactic_2_extractor_nb(num_user = 2, num_file_per_author = 9):
                 index = clang.cindex.Index.create()
                 tu = index.parse(f_path)
 
+            #syntactic features
                 #get bigram feature
-                # get_bigram(tu.cursor, num_file_dict[file])
                 bgd = get_bigram(tu.cursor)
                 num_file_dict[file].update(bgd)
-                
-                
+                   
                 #get max depth feature
                 num_file_dict[file]['maxdepthnode'] = get_MaxDepthNode(tu.cursor)
                 
@@ -42,9 +48,10 @@ def syntactic_2_extractor_nb(num_user = 2, num_file_per_author = 9):
                 file_class = file_class_tem.split('_')[-1]
                 num_file_dict[file]['class'] = file_class
                 
-                #get node type frequency:
-                ntd = get_ASTNodeTypeTF(tu.cursor)
-                num_file_dict[file].update(ntd)
+                #get node type frequency,tfidf:
+                ntf,ntfidf = get_ASTNodeTypeTF(tu.cursor, feature_idf_dict)
+                num_file_dict[file].update(ntf)
+                num_file_dict[file].update(ntfidf)
 
                 #get node type average depth
                 avg_depth_dic = get_ASTNodeTypeAvgDepth(tu.cursor)
@@ -53,6 +60,19 @@ def syntactic_2_extractor_nb(num_user = 2, num_file_per_author = 9):
                 #get cppKeywords frequency(syntactic)
                 keywords_dic = get_cppKeywords(tu.cursor)
                 num_file_dict[file].update(keywords_dic)
+
+                #get leavesTF,tfidf
+                leavestf_dic, leavestfidf_dic = get_LeavesTF(file_cursor = tu.cursor, idf_dic = leaves_idf_dict)
+                num_file_dict[file].update(leavestf_dic)
+                num_file_dict[file].update(leavestfidf_dic)
+
+                #get leaves Avg Depth
+                leavesad_dic = get_LeavesAD(file_cursor = tu.cursor)
+                num_file_dict[file].update(leavesad_dic)
+            
+            #lexical features
+                #get WordUnigramTF
+
 
 
         i += 1

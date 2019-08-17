@@ -64,24 +64,18 @@ def get_bigram(file_cursor):
     return bd_out    
 
 
-# index = clang.cindex.Index.create()
-# tu = index.parse('test4.cpp')
-# print 'Translation unit:', tu.spelling
-# print tu.cursor.kind
-# bd = {}
-# get_bigram(tu.cursor, BigramDic= bd)
-# print len(bd)
-# print bd
-    
+def spelll(cursor):
+    # if cursor.spelling.strip():
+        # return cursor.spelling
+    # else:
+        # return cursor.kind
+    return "( "+str(cursor.spelling) + " , "+str(cursor.kind)
+    # return str(cursor)
+
 if __name__ == '__main__':
     index = clang.cindex.Index.create()
-    tu = index.parse('test4.cpp')
+    tu = index.parse('test2.cpp')
     print 'Translation unit:', tu.spelling
-    print tu.cursor.kind
-    bd = {}
-    get_bigram(tu.cursor, BigramDic= bd)
-    print len(bd)
-    print bd
     
 
     # for c in tu.cursor.get_children():
@@ -124,21 +118,21 @@ if __name__ == '__main__':
 
 
 ################ This is a homemade ast tree for test ####################
-    # for c in tu.cursor.get_children():
-    #     print spell(c)
-    #     for a in c.get_children():
-    #         print "  ",spell(a)
-    #         for b in a.get_children():
-    #             print "    ",spell(b)
-    #             for d in b.get_children():
-    #                 print "      ",spell(d)
-    #                 for e in d.get_children():
-    #                     print " "*8,spell(e)
-    #                     for f in e.get_children():
-    #                         print " "*10,spell(f)
-    #                         for g in f.get_children():
-    #                             print " "*12,spell(g)
-    #                             for h in g.get_children():
-    #                                print " "*14,spell(h)
+    for c in tu.cursor.get_children():
+        print spelll(c)
+        for a in c.get_children():
+            print "  ",spelll(a)
+            for b in a.get_children():
+                print "    ",spelll(b)
+                for d in b.get_children():
+                    print "      ",spelll(d)
+                    for e in d.get_children():
+                        print " "*8,spelll(e)
+                        for f in e.get_children():
+                            print " "*10,spelll(f)
+                            for g in f.get_children():
+                                print " "*12,spelll(g)
+                                for h in g.get_children():
+                                   print " "*14,spelll(h)
 #############################################################################
 
