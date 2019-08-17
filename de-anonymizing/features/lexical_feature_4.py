@@ -6,7 +6,7 @@ from clang.cindex import CursorKind
 import math
 Config.set_library_file("/usr/local/Cellar/llvm/8.0.0_1/lib/libclang.dylib")
 
-def get_ast(cur):
+def get_l4(cur):
     num_token = 0
     for token in cur.get_tokens():
         num_token += 1
@@ -31,10 +31,10 @@ def get_ast(cur):
 if __name__ == '__main__':
     index = clang.cindex.Index.create()
     # tu = index.parse('test1.cpp')
-    tu = index.parse('test2.cpp')
+    tu = index.parse('test1.cpp')
     print 'Translation unit:', tu.spelling
     print tu.cursor.kind
     # bd = {}
-    print get_ast(tu.cursor)
+    print get_l4(tu.cursor)
     # print len(bd)
     # print bd

@@ -6,8 +6,10 @@ from clang.cindex import Cursor
 from clang.cindex import CursorKind
 import pandas as pd
 import pickle
+import math
 Config.set_library_file("/usr/local/Cellar/llvm/8.0.0_1/lib/libclang.dylib")
 sys.path.append(os.path.abspath("/Users/weiguo/Desktop/Replication/de-anonymizing"))
+#syntactic features
 from features.ASTNodeBigramTF import get_bigram
 from features.MaxDepthASTNode import get_MaxDepthNode
 from features.ASTNodeTypeTF import get_ASTNodeTypeTF
@@ -16,13 +18,29 @@ from features.cppKeywords import get_cppKeywords
 from features.utils import *
 from features.LeavesTF import get_LeavesTF
 from features.LeavesAvgDep import get_LeavesAD
+#lexical features
+from features.WordUnigram import get_L1
+from features.lexical_feature_2 import get_l2
+from features.lexical_feature_3 import get_l3
+from features.lexical_feature_4 import get_l4
+from features.lexical_feature_5 import get_l5
+from features.lexical_feature_6 import get_l6
+from features.lexical_feature_7 import get_l7
+from features.lexical_feature_8 import get_l8
+from features.lexical_feature_9 import get_l9
+from features.lexical_feature_10 import get_l10
+from features.lexical_feature_12 import get_l12
+from features.lexical_feature_14 import get_l14
+#layout features
+from features.layout_1 import get_lay1
+from features.layout_6 import get_lay6
 
 def syntactic_2_extractor_nb(num_user = 2, num_file_per_author = 9):
 
     path = "/Users/weiguo/Desktop/traindata"
     
-    feature_idf_dict = get_DocumentFrequency(dic_path = path, user_num = num_user)
-    leaves_idf_dict = get_lf(dic_path = path, user_num = num_user)
+    feature_idf_dict = get_DocumentFrequency(dic_path = path)
+    leaves_idf_dict = get_lf(dic_path = path)
         
     i = 0
     num_file_dict = {}
@@ -72,9 +90,48 @@ def syntactic_2_extractor_nb(num_user = 2, num_file_per_author = 9):
             
             #lexical features
                 #get WordUnigramTF
+                l1_dic = get_L1(file_cursor = tu.cursor)
+                num_file_dict[file].update(l1_dic)
+                #get l2
+                l2_dic = get_l2(tu.cursor)
+                num_file_dict[file].update(l2_dic)
+                #get l3
+                num_file_dict[file]['l3feature'] = get_l3(tu.cursor)
+                #get l4
+                num_file_dict[file]['l4feature'] = get_l4(tu.cursor)
+                #get l5
+                num_file_dict[file]['l5feature'] = get_l5(tu.cursor)
+                #get l6
+                num_file_dict[file]['l6feature'] = get_l6(tu.cursor)
+                #get l7
+                num_file_dict[file]['l7feature'] = get_l7(tu.cursor)
+                #get l8
+                num_file_dict[file]['l8feature'] = get_l8(tu.cursor)
+                #get l9
+                num_file_dict[file]['l9feature'] = get_l9(tu.cursor)
+                #get l10
+                num_file_dict[file]['l10feature'] = get_l10(tu.cursor)
+                #get l12, l13
+                num_file_dict[file]['l12feature'] = get_l12(tu.cursor)[0]
+                num_file_dict[file]['l13feature'] = get_l12(tu.cursor)[1]
+                #get l14, l15
+                num_file_dict[file]['l14feature'] = get_l14(fname = f_path)[0]
+                num_file_dict[file]['l15feature'] = get_l14(fname = f_path)[1]
+            
+            #layout features
+                #lay1, lay2, lay3, lay4, lay5
+                num_file_dict[file]['lay1feature'] = get_lay1(path = f_path, f_cursor = tu.cursor)[0]
+                num_file_dict[file]['lay2feature'] = get_lay1(path = f_path, f_cursor = tu.cursor)[1]
+                num_file_dict[file]['lay3feature'] = get_lay1(path = f_path, f_cursor = tu.cursor)[2]
+                num_file_dict[file]['lay4feature'] = get_lay1(path = f_path, f_cursor = tu.cursor)[3]
+                num_file_dict[file]['lay5feature'] = get_lay1(path = f_path, f_cursor = tu.cursor)[4]
+                num_file_dict[file]['lay6feature'] = get_lay6(path = f_path)
 
 
 
+
+
+        #test for num_user
         i += 1
         if i > num_user:
             break
@@ -114,7 +171,7 @@ def syntactic_2_extractor_nb(num_user = 2, num_file_per_author = 9):
 
 
 if __name__ == '__main__':
-    b = syntactic_2_extractor_nb(num_user=3)
+    b = syntactic_2_extractor_nb(num_user=50)
     b_frame = pd.DataFrame.from_dict(b,orient='index')
     b_frame.to_csv('/Users/weiguo/Desktop/Replication/de-anonymizing/data/bigram0814.csv')
     

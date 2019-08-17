@@ -17,7 +17,7 @@ def get_ASTNodeTypeTF(file_cursor, idf_d):
         store the occurance of each node in dictionary NodeTypeDic
         """
         for c in cursor.get_children():
-            feature_name = "NodeTypeTF" + str(c.kind)
+            feature_name = str(c.kind)
             if feature_name not in NodeTypeDic:
                 NodeTypeDic[feature_name] = 1
             else:
@@ -49,6 +49,7 @@ def get_ASTNodeTypeTF(file_cursor, idf_d):
 
     dic_tem = {}
     get_ASTNodeTypeTF_inside(cursor = file_cursor, NodeTypeDic=dic_tem)
+
     dic_out_tf = get_bi_tf(rd = dic_tem)
     dic_out_tfidf = get_tfidf(rd = dic_out_tf)
 

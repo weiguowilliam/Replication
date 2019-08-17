@@ -7,7 +7,7 @@ import math
 
 Config.set_library_file("/usr/local/Cellar/llvm/8.0.0_1/lib/libclang.dylib")
 
-def get_ast(cur):
+def get_l9(cur):
     num_token = 0
     for token in cur.get_tokens():
         token_spelling = token.spelling
@@ -55,6 +55,6 @@ def test_ast(cursor):
 
 if __name__ == '__main__':
     index = clang.cindex.Index.create()
-    tu = index.parse('test2.cpp')
-    print get_ast(tu.cursor)
+    tu = index.parse('test1.cpp')
+    print get_l9(tu.cursor)
     # test_ast(tu.cursor)

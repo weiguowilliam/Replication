@@ -9,7 +9,7 @@ Config.set_library_file("/usr/local/Cellar/llvm/8.0.0_1/lib/libclang.dylib")
 
 
 
-def get_ast(cursor):
+def get_l7(cursor):
     key_dic = {"alignas",	"alignof",	"and"	,"and_eq"	,"asm",	"auto",	"bitand"	,"bitor",	"bool",	"break"	,"case",
 "catch",	"char"	,"char16_t",	"char32_t",	"class",	"compl"	,"const"	,"constexpr"	,"const_cast"	,"continue",	"decltype",
 "default",	"delete",	"do",	"double"	,"dynamic_cast",	"else",	"enum",	"explicit"	,"export"	,"extern"	,"false",
@@ -47,4 +47,4 @@ def get_ast(cursor):
 if __name__ == '__main__':
     index = clang.cindex.Index.create()
     tu = index.parse('test2.cpp')
-    print get_ast(tu.cursor)
+    print get_l7(tu.cursor)

@@ -7,7 +7,7 @@ import math
 
 Config.set_library_file("/usr/local/Cellar/llvm/8.0.0_1/lib/libclang.dylib")
 
-def get_ast(cur):
+def get_l10(cur):
     def ast(cursor, level = 0, depthlist = []):
         """
         control statement:if-else, switch,for, while, do-while
@@ -58,7 +58,7 @@ def test_ast(cursor):
 if __name__ == '__main__':
     index = clang.cindex.Index.create()
     tu = index.parse('test1.cpp')
-    print get_ast(tu.cursor)
+    print get_l10(tu.cursor)
     # test_ast(tu.cursor)
     # dll = []
     # get_ast(cursor = tu.cursor, level = 0, depthlist= dll)

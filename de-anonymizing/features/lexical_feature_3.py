@@ -6,7 +6,7 @@ from clang.cindex import CursorKind
 import math
 Config.set_library_file("/usr/local/Cellar/llvm/8.0.0_1/lib/libclang.dylib")
 
-def get_ast(cur):
+def get_l3(cur):
     num_ternary = 0
     for token in cur.get_tokens():
         str_token = token.spelling
@@ -26,6 +26,7 @@ def get_ast(cur):
         num_return = 0
     else:
         num_return = math.log(float(num_ternary)/file_length)
+
     
     return num_return
     
@@ -37,6 +38,6 @@ if __name__ == '__main__':
     print 'Translation unit:', tu.spelling
     print tu.cursor.kind
     # bd = {}
-    print get_ast(tu.cursor)
+    print get_l3(tu.cursor)
     # print len(bd)
     # print bd

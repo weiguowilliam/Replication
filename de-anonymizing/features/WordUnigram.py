@@ -4,24 +4,35 @@ import clang.cindex
 from clang.cindex import Config
 from clang.cindex import Cursor
 from clang.cindex import CursorKind
-
 Config.set_library_file("/usr/local/Cellar/llvm/8.0.0_1/lib/libclang.dylib")
 
-def get_ast(cur, UniDic = {}):
-        '''
-        tokenize cpp file and store the unigram into a dictionary
-        '''
-        for token in cur.get_tokens():
-            str_token = token.spelling
-            if str_token not in UniDic:
-                UniDic[str_token] = 1
-            else:
-                UniDic[str_token] += 1
+def get_L1(file_cursor):
+    '''
+    tokenize cpp file and store the unigram into a dictionary
+    '''
+    UniDic= {}
+    token_len = 0
+    for token in file_cursor.get_tokens():
+        token_len += 1
+        str_token = token.spelling
+        if str_token not in UniDic:
+            UniDic[str_token] = 1
+        else:
+            UniDic[str_token] += 1
+        
+    for token in UniDic:
+        tem = UniDic[token]
+        UniDic[token] = float(tem)/token_len
 
-        cursor_content=""
-        for token in cur.get_tokens():
-            str_token = token.spelling+" "
-            cursor_content = cursor_content+str_token
+    def trans(d,s):
+        d_out = {}
+        for raw_feature in d:
+            new_feature = str(s) + str(raw_feature)
+            d_out[new_feature] = d[raw_feature]
+        return d_out
+
+    dic_out = trans(UniDic,'l1')
+    return dic_out
 
 
 if __name__ == '__main__':
@@ -30,7 +41,6 @@ if __name__ == '__main__':
     tu = index.parse('test2.cpp')
     print 'Translation unit:', tu.spelling
     print tu.cursor.kind
-    bd = {}
-    get_ast(tu.cursor,bd)
+    bd = get_L1(tu.cursor)
     print len(bd)
     print bd

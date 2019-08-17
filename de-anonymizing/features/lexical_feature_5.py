@@ -7,7 +7,7 @@ import math
 
 Config.set_library_file("/usr/local/Cellar/llvm/8.0.0_1/lib/libclang.dylib")
 
-def get_ast(cursor):
+def get_l5(cursor):
     """
     store the depth of each node into depthlist, use max(depthlist) to get the MaxDepthASTNode of each tree
     """
@@ -36,4 +36,4 @@ def get_ast(cursor):
 if __name__ == '__main__':
     index = clang.cindex.Index.create()
     tu = index.parse('test2.cpp')
-    get_ast(tu.cursor)
+    get_l5(tu.cursor)

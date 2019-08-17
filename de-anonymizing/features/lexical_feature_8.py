@@ -7,7 +7,7 @@ import math
 
 Config.set_library_file("/usr/local/Cellar/llvm/8.0.0_1/lib/libclang.dylib")
 
-def get_ast(file_cursor):
+def get_l8(file_cursor):
     def ast(cur,literal_list = []):
         """
         count the number of function declaration
@@ -64,5 +64,5 @@ def test_ast(cursor):
 if __name__ == '__main__':
     index = clang.cindex.Index.create()
     tu = index.parse('test2.cpp')
-    print get_ast(tu.cursor)
+    print get_l8(tu.cursor)
     # test_ast(tu.cursor)

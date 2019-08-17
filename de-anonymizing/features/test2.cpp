@@ -1,5 +1,3 @@
-
-
 int foo()
 {
     if((x<0) || x>MAX)
@@ -9,6 +7,5 @@ int foo()
         return -1;
     else
     /*sdf */
-    return 1;//abc\
-sdf
+    return 1;//abc
 }

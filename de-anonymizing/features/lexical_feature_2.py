@@ -9,7 +9,7 @@ import math
 
 Config.set_library_file("/usr/local/Cellar/llvm/8.0.0_1/lib/libclang.dylib")
 
-def get_lexical_feature_2(cursor):
+def get_l2(cursor):
     
     def get_ast(cur):
         '''
@@ -35,6 +35,11 @@ def get_lexical_feature_2(cursor):
         
         if "elseif" in NumKeyDic:
             NumKeyDic["else"] -= NumKeyDic["elseif"]
+            if NumKeyDic["else"] == 0:
+                del NumKeyDic["else"]
+        
+
+
         
         return NumKeyDic
     
@@ -55,23 +60,30 @@ def get_lexical_feature_2(cursor):
             str_token = token.spelling
             cursor_content = cursor_content+str_token
         return len(cursor_content)
+
+    def trans(d,s):
+        d_out = {}
+        for raw_feature in d:
+            new_feature = str(s) + str(raw_feature)
+            d_out[new_feature] = d[raw_feature]
+        return d_out
     
     file_length = get_file_length(cur = cursor)
     nkd = get_ast(cur = cursor)
     okd = get_keyword(dic = nkd)
-    return okd
+    out_dic = trans(okd,'l2')
+    return out_dic
 
 
 
 
 if __name__ == '__main__':
     index = clang.cindex.Index.create()
-    tu = index.parse('test1.cpp')
+    tu = index.parse('/Users/weiguo/Desktop/traindata/A.Grishchenko/1460488_1483485_A.Grishchenko.cpp')
     # tu = index.parse('test2.cpp')
     print 'Translation unit:', tu.spelling
     print tu.cursor.kind
     # bd = {}
-    bd = get_lexical_feature_2(tu.cursor)
-    print len(bd)
-    print bd
-    print bd['else']
+    bd = get_l2(tu.cursor)
+
+    
