@@ -26,12 +26,12 @@ def get_L1(file_cursor):
 
     def trans(d,s):
         d_out = {}
-        for raw_feature in d:
+        for i,raw_feature in enumerate(d):
             new_feature = str(s) + str(raw_feature)
             d_out[new_feature] = d[raw_feature]
         return d_out
 
-    dic_out = trans(UniDic,'l1')
+    dic_out = trans(UniDic,'l1_feature')
     return dic_out
 
 

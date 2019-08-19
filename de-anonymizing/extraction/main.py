@@ -9,6 +9,7 @@ import pickle
 import math
 Config.set_library_file("/usr/local/Cellar/llvm/8.0.0_1/lib/libclang.dylib")
 sys.path.append(os.path.abspath("/Users/weiguo/Desktop/Replication/de-anonymizing"))
+#import exctraction features
 #syntactic features
 from features.ASTNodeBigramTF import get_bigram
 from features.MaxDepthASTNode import get_MaxDepthNode
@@ -53,18 +54,18 @@ def syntactic_2_extractor_nb(num_user = 2, num_file_per_author = 9):
                 index = clang.cindex.Index.create()
                 tu = index.parse(f_path)
 
-            #syntactic features
-                #get bigram feature
-                bgd = get_bigram(tu.cursor)
-                num_file_dict[file].update(bgd)
-                   
-                #get max depth feature
-                num_file_dict[file]['maxdepthnode'] = get_MaxDepthNode(tu.cursor)
-                
                 #get file class(author)
                 file_class_tem = str(file)[0:-4]
                 file_class = file_class_tem.split('_')[-1]
                 num_file_dict[file]['class'] = file_class
+
+            #syntactic features
+                #get bigram feature
+                bgd = get_bigram(tu.cursor)
+                num_file_dict[file].update(bgd)
+                
+                #get max depth feature
+                num_file_dict[file]['maxdepthnode'] = get_MaxDepthNode(tu.cursor)
                 
                 #get node type frequency,tfidf:
                 ntf,ntfidf = get_ASTNodeTypeTF(tu.cursor, feature_idf_dict)
@@ -126,7 +127,7 @@ def syntactic_2_extractor_nb(num_user = 2, num_file_per_author = 9):
                 num_file_dict[file]['lay4feature'] = get_lay1(path = f_path, f_cursor = tu.cursor)[3]
                 num_file_dict[file]['lay5feature'] = get_lay1(path = f_path, f_cursor = tu.cursor)[4]
                 num_file_dict[file]['lay6feature'] = get_lay6(path = f_path)
-
+            
 
 
 
@@ -173,6 +174,6 @@ def syntactic_2_extractor_nb(num_user = 2, num_file_per_author = 9):
 if __name__ == '__main__':
     b = syntactic_2_extractor_nb(num_user=50)
     b_frame = pd.DataFrame.from_dict(b,orient='index')
-    b_frame.to_csv('/Users/weiguo/Desktop/Replication/de-anonymizing/data/bigram_50.csv')
+    b_frame.to_csv('/Users/weiguo/Desktop/Replication/de-anonymizing/data/DATA50ori_0819.csv')
     
     

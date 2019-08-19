@@ -19,6 +19,16 @@ def get_cppKeywords(file_cursor):
 "this",	"thread_local",	"throw"	,"true",	"try"	,"typedef"	,"typeid"	,"typename",	"union",	"unsigned",	"using"	,"virtual",
 "void",	"volatile",	"wchar_t"	,"while"	,"xor"	,"xor_eq"}
 
+    all_dic = {}
+    for token in file_cursor.get_tokens():
+        str_token = token.spelling
+        feature_name = "cppKeywords" + str_token
+        if str_token in all_dic:
+            all_dic[str_token] += 1
+        else:
+            all_dic[str_token] = 1
+    
+
     output_dic= {}
     for token in file_cursor.get_tokens():
         str_token = token.spelling
@@ -36,18 +46,33 @@ def get_cppKeywords(file_cursor):
 
     tf_d = {i:0 for i in output_dic}
     sum_node = 0
-    for i in output_dic:
-        sum_node += output_dic[i]
+    for i in all_dic:
+        sum_node += all_dic[i]
+
     for i in tf_d:
-        try:
-            tf_d[i] = float(output_dic[i])/sum_node
-        except:
-            print file_cursor.spelling
-    return tf_d
+        tf_d[i] = float(output_dic[i])/sum_node
+
+    def trans(d,s):
+        d_out = {}
+        for i, raw_feature in enumerate(d):
+            new_feature = str(s) + str(raw_feature)
+            d_out[new_feature] = d[raw_feature]
+        return d_out
+    
+    d_out = trans(tf_d,"l6_feature")
+
+    return d_out
     
 
 if __name__ == '__main__':
     index = clang.cindex.Index.create()
     tu = index.parse('test1.cpp')
-    print get_cppKeywords(tu.cursor)
-    print len(get_cppKeywords(tu.cursor))
+    a =  get_cppKeywords(tu.cursor)
+    s = 0
+    for k in a:
+        if a[k] != 0:
+            print k
+            print a[k]
+            s += a[k]
+    print s
+    

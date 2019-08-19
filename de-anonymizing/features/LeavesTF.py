@@ -3,7 +3,7 @@ import clang.cindex
 from clang.cindex import Config
 from clang.cindex import Cursor
 from clang.cindex import CursorKind
-from utils import *
+from utils import get_lf
 Config.set_library_file("/usr/local/Cellar/llvm/8.0.0_1/lib/libclang.dylib")
 
 def get_LeavesTF(file_cursor,idf_dic):
@@ -20,6 +20,13 @@ def get_LeavesTF(file_cursor,idf_dic):
             # print "t"
             for c in cur.get_children():
                 get_leaves_inside(c, ld)
+    
+    def trans(d,s):
+        d_out = {}
+        for i,raw_feature in enumerate(d):
+            new_feature = str(s) + str(raw_feature)
+            d_out[new_feature] = d[raw_feature]
+        return d_out
 
     
     ld_tem = {}
@@ -40,8 +47,8 @@ def get_LeavesTF(file_cursor,idf_dic):
 
 
     #translate
-    tf_tran_out = trans(d = ld_out, s = "leavesTF")
-    tfidf_tran_out = trans(d = ld_idf_out, s = "leavesTFIDF")
+    tf_tran_out = trans(d = ld_out, s = "s7_feature")
+    tfidf_tran_out = trans(d = ld_idf_out, s = "s7tfidf_feature")
     
     return tf_tran_out,tfidf_tran_out
         
@@ -56,3 +63,8 @@ if __name__ == '__main__':
     # print next(next(tu.cursor.get_children()).get_children()).spelling
     # a = tu.cursor.get_children()
     # print any(True for _ in a)
+    path = "/Users/weiguo/Desktop/traindata"
+    a_idf = get_lf(path)
+    a,b = get_LeavesTF(tu.cursor, a_idf)
+    print a
+    print b

@@ -18,16 +18,9 @@ def get_bigram(file_cursor):
         Bigram can only be made by a parent node ant its children node. Use BigramDic to store the bigram pair.
         When the node is not a part of real code, use its cursor kind to construct the bigram.
         """
-        # def spell(cursor):
-        #     if cursor.spelling.strip():
-        #         return cursor.spelling,0
-        #     else:
-        #         return cursor.kind,1
 
         for c in cursor.get_children():
             if level != 0:
-                # parent_spelling = spell(cursor)[0]
-                # child_spelling = spell(c)[0]
                 parent_spelling = spell(cursor)[0]
                 child_spelling = spell(c)[0]
                 parent_isKind = spell(cursor)[1]
@@ -36,14 +29,10 @@ def get_bigram(file_cursor):
                     pass
                 else:
 
-                    name = str(parent_spelling)+str(child_spelling)
+                    name = "Bigram" + str(parent_spelling)+str(child_spelling)
                     if name not in BigramDic:
-                    # if (parent_spelling, child_spelling) not in BigramDic:
-                        # name = str(parent_spelling)+str(child_spelling)
-                        # BigramDic[(parent_spelling, child_spelling)] = 1
                         BigramDic[name] = 1
                     else:
-                        # BigramDic[(parent_spelling, child_spelling)] += 1
                         BigramDic[name] += 1    
                 
             get_bi_inside(c, BigramDic, level + 1)
@@ -57,25 +46,35 @@ def get_bigram(file_cursor):
             tf_d[i] = float(rd[i])/sum_node
         return tf_d
 
+    def trans(d,s):
+        d_out = {}
+        i = 0
+        for raw_feature in d:
+            new_feature = str(s) + str(i)
+            d_out[new_feature] = d[raw_feature]
+            i += 1
+        return d_out
 
     bd_tem = {}
-    get_bi_inside(cursor = file_cursor, BigramDic={}, level = 0)
+    get_bi_inside(cursor = file_cursor, BigramDic=bd_tem, level = 0)
     bd_out = get_bi_tf(rd = bd_tem)
-    return bd_out    
+    # bd_trans = trans(bd_out,"bigram")
+    return bd_out
 
 
-def spelll(cursor):
-    # if cursor.spelling.strip():
-        # return cursor.spelling
-    # else:
-        # return cursor.kind
-    return "( "+str(cursor.spelling) + " , "+str(cursor.kind)
-    # return str(cursor)
+# def spelll(cursor):
+#     # if cursor.spelling.strip():
+#         # return cursor.spelling
+#     # else:
+#         # return cursor.kind
+#     return "( "+str(cursor.spelling) + " , "+str(cursor.kind)
+#     # return str(cursor)
 
 if __name__ == '__main__':
     index = clang.cindex.Index.create()
-    tu = index.parse('test2.cpp')
-    print 'Translation unit:', tu.spelling
+    tu = index.parse('test1.cpp')
+    a = get_bigram(tu.cursor)
+    print a
     
 
     # for c in tu.cursor.get_children():
@@ -118,21 +117,21 @@ if __name__ == '__main__':
 
 
 ################ This is a homemade ast tree for test ####################
-    for c in tu.cursor.get_children():
-        print spelll(c)
-        for a in c.get_children():
-            print "  ",spelll(a)
-            for b in a.get_children():
-                print "    ",spelll(b)
-                for d in b.get_children():
-                    print "      ",spelll(d)
-                    for e in d.get_children():
-                        print " "*8,spelll(e)
-                        for f in e.get_children():
-                            print " "*10,spelll(f)
-                            for g in f.get_children():
-                                print " "*12,spelll(g)
-                                for h in g.get_children():
-                                   print " "*14,spelll(h)
+    # for c in tu.cursor.get_children():
+    #     print spelll(c)
+    #     for a in c.get_children():
+    #         print "  ",spelll(a)
+    #         for b in a.get_children():
+    #             print "    ",spelll(b)
+    #             for d in b.get_children():
+    #                 print "      ",spelll(d)
+    #                 for e in d.get_children():
+    #                     print " "*8,spelll(e)
+    #                     for f in e.get_children():
+    #                         print " "*10,spelll(f)
+    #                         for g in f.get_children():
+    #                             print " "*12,spelll(g)
+    #                             for h in g.get_children():
+    #                                print " "*14,spelll(h)
 #############################################################################
 

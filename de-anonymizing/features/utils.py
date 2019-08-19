@@ -17,8 +17,8 @@ def get_lf(dic_path):
                 leave = cur.spelling
                 if leave not in ld:
                     ld[leave] = 1
-                else:
-                    ld[leave] += 1 
+                # else:
+                #     ld[leave] += 1 
         else:
             # print "t"
             for c in cur.get_children():
@@ -60,11 +60,11 @@ def get_DocumentFrequency(dic_path):
         for c in file_cursor.get_children():
             if c.kind not in NodeTypeDic:
                 NodeTypeDic[c.kind] = 1
-            else:
-                NodeTypeDic[c.kind] += 1
+            # else:
+            #     NodeTypeDic[c.kind] += 1
             get_occ(c,NodeTypeDic)
     
-    # i = 0
+
     node_orr_dic = {}
     
     for r,d,f in os.walk(dic_path):
@@ -77,9 +77,6 @@ def get_DocumentFrequency(dic_path):
                 get_occ(tu.cursor, dic_tem)
                 node_orr_dic[file] = dic_tem
         
-        # i += 1
-        # if i > user_num:
-        #     break
     
     feature_occ_tf = {}
     file_num = len(node_orr_dic)
@@ -105,7 +102,8 @@ def trans(d,s):
         
 if __name__ == '__main__':
     # get_lf("/Users/weiguo/Desktop/traindata",2)
-    print get_DocumentFrequency(dic_path = "/Users/weiguo/Desktop/traindata")
+    a = get_DocumentFrequency(dic_path = "/Users/weiguo/Desktop/traindata")
+
 
 
 
