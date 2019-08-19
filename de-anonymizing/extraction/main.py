@@ -173,6 +173,6 @@ def syntactic_2_extractor_nb(num_user = 2, num_file_per_author = 9):
 if __name__ == '__main__':
     b = syntactic_2_extractor_nb(num_user=50)
     b_frame = pd.DataFrame.from_dict(b,orient='index')
-    b_frame.to_csv('/Users/weiguo/Desktop/Replication/de-anonymizing/data/bigram0814.csv')
+    b_frame.to_csv('/Users/weiguo/Desktop/Replication/de-anonymizing/data/bigram_50.csv')
     
     

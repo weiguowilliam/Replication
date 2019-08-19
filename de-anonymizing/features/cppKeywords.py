@@ -39,7 +39,10 @@ def get_cppKeywords(file_cursor):
     for i in output_dic:
         sum_node += output_dic[i]
     for i in tf_d:
-        tf_d[i] = float(output_dic[i])/sum_node
+        try:
+            tf_d[i] = float(output_dic[i])/sum_node
+        except:
+            print file_cursor.spelling
     return tf_d
     
 
