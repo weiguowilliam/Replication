@@ -166,14 +166,20 @@ def syntactic_2_extractor_nb(num_user = 2, num_file_per_author = 9):
             new_feature = trans_dict[old_feature]
             out_dict[file][new_feature] = num_file_all_dict[file][old_feature]
     
-    return out_dict
+
+
+    return out_dict, trans_dict
 
 
 
 
 if __name__ == '__main__':
-    b = syntactic_2_extractor_nb(num_user=50)
-    b_frame = pd.DataFrame.from_dict(b,orient='index')
-    b_frame.to_csv('/Users/weiguo/Desktop/Replication/de-anonymizing/data/DATA50ori_0819.csv')
+    b, td = syntactic_2_extractor_nb(num_user=50)
+    b_frame= pd.DataFrame.from_dict(b,orient='index')
+    b_frame.to_csv('/Users/weiguo/Desktop/Replication/de-anonymizing/data/dt50ori_forweka.csv',index = False)
+
+    # pickle_out = open("/Users/weiguo/Desktop/Replication/de-anonymizing/data/transdic.pickle","wb")
+    # pickle.dump(td,pickle_out)
+    # pickle_out.close()
     
     

@@ -7,11 +7,16 @@ from clang.cindex import CursorKind
 Config.set_library_file("/usr/local/Cellar/llvm/8.0.0_1/lib/libclang.dylib")
 
 def get_bigram(file_cursor):
+    # def spell(cursor):
+    #     if cursor.spelling.strip():
+    #         return cursor.spelling,0
+    #     else:
+    #         return cursor.kind,1
     def spell(cursor):
         if cursor.spelling.strip():
-            return cursor.spelling,0
+            return cursor.kind, cursor.spelling
         else:
-            return cursor.kind,1
+            return cursor.kind,"BLANK"
 
     def get_bi_inside(cursor, BigramDic = {}, level = 0):
         """
@@ -21,21 +26,43 @@ def get_bigram(file_cursor):
 
         for c in cursor.get_children():
             if level != 0:
-                parent_spelling = spell(cursor)[0]
-                child_spelling = spell(c)[0]
-                parent_isKind = spell(cursor)[1]
-
-                if (parent_spelling == child_spelling)&(parent_isKind == 0):# in case of (UNEXPOSED_EXPR,DECL_REF_EXPR)->(a,a)
+                parent_kind, parent_code = spell(cursor)
+                child_kind, child_code = spell(c)
+                
+                if (parent_kind == CursorKind.UNEXPOSED_EXPR) and (child_kind == CursorKind.DECL_REF_EXPR):# in case of (UNEXPOSED_EXPR,DECL_REF_EXPR)->(a,a)
                     pass
                 else:
-
-                    name = "Bigram" + str(parent_spelling)+str(child_spelling)
+                    name = "Bigram" + str(parent_kind) + str(child_kind) + str(parent_code) + str(child_code)
                     if name not in BigramDic:
                         BigramDic[name] = 1
                     else:
                         BigramDic[name] += 1    
-                
+                    
             get_bi_inside(c, BigramDic, level + 1)
+
+    # def get_bi_inside(cursor, BigramDic = {}, level = 0):
+    #     """
+    #     Bigram can only be made by a parent node ant its children node. Use BigramDic to store the bigram pair.
+    #     When the node is not a part of real code, use its cursor kind to construct the bigram.
+    #     """
+
+    #     for c in cursor.get_children():
+    #         if level != 0:
+    #             parent_spelling = spell(cursor)[0]
+    #             child_spelling = spell(c)[0]
+    #             parent_isKind = spell(cursor)[1]
+
+    #             if (parent_spelling == child_spelling)&(parent_isKind == 0):# in case of (UNEXPOSED_EXPR,DECL_REF_EXPR)->(a,a)
+    #                 pass
+    #             else:
+
+    #                 name = "Bigram" + str(parent_spelling)+str(child_spelling)
+    #                 if name not in BigramDic:
+    #                     BigramDic[name] = 1
+    #                 else:
+    #                     BigramDic[name] += 1    
+                
+    #         get_bi_inside(c, BigramDic, level + 1)
 
     def get_bi_tf(rd = {}):
         tf_d = {i:0 for i in rd}
@@ -62,61 +89,21 @@ def get_bigram(file_cursor):
     return bd_out
 
 
-# def spelll(cursor):
-#     # if cursor.spelling.strip():
-#         # return cursor.spelling
-#     # else:
-#         # return cursor.kind
-#     return "( "+str(cursor.spelling) + " , "+str(cursor.kind)
-#     # return str(cursor)
+
 
 if __name__ == '__main__':
     index = clang.cindex.Index.create()
     tu = index.parse('test1.cpp')
     a = get_bigram(tu.cursor)
-    print a
+    print len(a)
+    print a 
     
-
-    # for c in tu.cursor.get_children():
-    #     print c.spelling
-    #     print type(c.spelling)
-    #     print c.kind
-        
-    #     if c.spelling.strip():
-    #         print "T"
-    #     else:
-    #         print "F"
-    #     print "xxxxxxxxxxxxxxxxxxx"
-
-    # for c in tu.cursor.get_children():
-    #     print "*",c.spelling,"*"
-    #     print c.kind
-    #     for a in c.get_children():
-    #         print "*",a.spelling,"*"
-    #         print a.kind
-    #         print "(",spell(c),",",spell(a),")"
-    #     print "XXXXXXXXX"
-
-    # for c in tu.cursor.get_children():
-    #     # print "*",c.spelling,"*"
-    #     # print c.kind
-    #     for a in c.get_children():
-    #         # print "*",a.spelling,"*"
-    #         # print a.kind
-    #         print "(",spell(c),",",spell(a),")"
-    #         for b in a.get_children():
-    #             # print "*",b.spelling,"*"
-    #             # print b.kind
-    #             print "  (",spell(a),",",spell(b),")"
-    #             for d in b.get_children():
-    #                 print "    (",spell(b),",",spell(d),")"
-    #                 for e in d.get_children():
-    #                     print "      (",spell(d),",",spell(e),")"
-            
-    #     print "xxxxxxxxxxxxxx"
 
 
 ################ This is a homemade ast tree for test ####################
+    # def spelll(cursor):
+    #     return "( "+str(cursor.spelling) + " , "+str(cursor.kind)
+
     # for c in tu.cursor.get_children():
     #     print spelll(c)
     #     for a in c.get_children():

@@ -12,8 +12,8 @@ import math
 # bdf = pd.read_csv("/Users/weiguo/Desktop/Replication/de-anonymizing/data/bigram0818_100.csv")  #this uses all features
 # bdf = pd.read_csv("/Users/weiguo/Desktop/Replication/de-anonymizing/data/data_100.csv")
 #0819
-bdf = pd.read_csv("/Users/weiguo/Desktop/Replication/de-anonymizing/data/DATA50ori_0819.csv") # 50 ALL FEATURES
-# bdf = pd.read_csv("/Users/weiguo/Desktop/Replication/de-anonymizing/data/data0819_50.csv") # 50 informative
+# bdf = pd.read_csv("/Users/weiguo/Desktop/Replication/de-anonymizing/data/DATA50ori_0819.csv") # 50 ALL FEATURES
+bdf = pd.read_csv("/Users/weiguo/Desktop/Replication/de-anonymizing/data/data0819_50.csv") # 50 informative
 
 bdf_head = list(bdf.columns) 
 use_head = bdf_head
