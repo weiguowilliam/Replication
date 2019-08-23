@@ -7,4 +7,4 @@ java -cp /Users/weiguo/Desktop/weka-3-8-3/weka.jar weka.core.converters.CSVSaver
 python classifier1.py
 
 
-java -cp /Users/weiguo/Desktop/weka-3-8-3/weka.jar weka.core.converters.CSVSaver -i /Users/weiguo/Desktop/Replication/de-anonymizing/data/data0819_50.arff -o /Users/weiguo/Desktop/Replication/de-anonymizing/data/data0819_50.csv
+java -cp /Users/weiguo/Desktop/weka-3-8-3/weka.jar weka.core.converters.CSVSaver -i /Users/weiguo/Desktop/Replication/de-anonymizing/data/arff0823.arff -o /Users/weiguo/Desktop/Replication/de-anonymizing/data/data0823.csv
